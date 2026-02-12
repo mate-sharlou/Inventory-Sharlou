@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Box FP01</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h1 id="boxTitle">Box</h1>
+
+<a href="forepeak.html">← Back to Forepeak</a>
+
+<div id="tableContainer"></div>
+
+<script>
+function getPageInfo() {
+  const page = window.location.pathname.split("/").pop().replace(".html", "");
+  const parts = page.split("_"); 
+  return {
+    location: parts[0],
+    boxId: parts[1]
+  };
+}
+
+function loadBoxInventory() {
+  const info = getPageInfo();
+
+  fetch("data.json")
+    .then(res => res.json())
+    .then(data => {
+      const boxes = data[info.location];
+      const box = boxes.find(b => b.id === info.boxId);
+
+      if (!box) {
+        document.getElementById("tableContainer").innerHTML = "<p>Box not found.</p>";
+        return;
+      }
+
+      // titre
+      document.getElementById("boxTitle").innerText = box.name + " Inventory";
+
+      // création tableau
+      let html = `
+        <table class="inventory-table">
+          <tr>
+            <th>Item</th>
+            <th>Quantity</th>
+          </tr>
+      `;
+
+      // ici on transforme chaque item en ligne (qty = 1 par défaut)
+      box.items.forEach(item => {
+        html += `
+          <tr>
+            <td>${item}</td>
+            <td>1</td>
+          </tr>
+        `;
+      });
+
+      html += "</table>";
+
+      document.getElementById("tableContainer").innerHTML = html;
+    });
+}
+
+window.onload = loadBoxInventory;
+</script>
+
+</body>
+</html>

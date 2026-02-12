@@ -1,0 +1,67 @@
+{
+  "forepeak": [
+    {
+      "id": "fp01",
+      "name": "Box FP01",
+      "description": "Composite I",
+      "items": [
+        "Spabond",
+        "Carbon fiber",
+        "Tools"
+      ]
+    },
+    {
+      "id": "fp02",
+      "name": "Box FP02",
+      "description": "Composite II",
+      "items": [
+        "West System Resin",
+        "Awlfair",
+        "Polyester Filler",
+        "Putty"
+      ]
+    },
+    {
+      "id": "fp03",
+      "name": "Box FP03",
+      "description": "Various I",
+      "items": [
+        "Velcro",
+        "Rubber",
+        "Seal"
+      ]
+    }
+    
+  ],
+
+  "portdecklocker": [
+    {
+      "id": "dl01",
+      "name": "Box DL01",
+      "description": "Ropes and shackles",
+      "items": [
+        "Spare rope",
+        "Soft shackles",
+        "Dyneema"
+      ]
+    },
+    {
+      "id": "dl02",
+      "name": "Box DL02",
+      "description": "Cleaning gear",
+      "items": [
+        "Boat soap",
+        "Polish",
+        "Microfiber cloth"
+      ]
+    }
+  ],
+
+  "lazaret": [],
+  "stbdecklocker": [],
+  "diningroom": [],
+  "crewbilge": [],
+  "lowersaloon": [],
+  "ownercabin": [],
+  "cockpit": []
+}
