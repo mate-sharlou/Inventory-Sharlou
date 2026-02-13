@@ -3,6 +3,10 @@ body {
   background-color: #f4f4f4;
   text-align: center;
   margin: 0;
+  padding: 0;   /* IMPORTANT */
+}
+
+.page-content {
   padding: 20px;
 }
 
@@ -14,22 +18,29 @@ body {
 
 /* SEARCH */
 .search-container {
-  margin-bottom: 30px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 25px;
+  padding: 0 15px;
 }
 
-#search {
-  width: 60%;
-  padding: 15px;
-  font-size: 20px;
-  border-radius: 8px;
+.page-wrapper {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+
+#search, #searchZone {
+  width: 100%;
+  max-width: 900px;   /* limite sur grand écran */
+  padding: 16px;
+  font-size: 18px;
+  border-radius: 10px;
   border: 1px solid #ccc;
+  box-sizing: border-box;
 }
 
-/* IMAGE SECTION */
-.image-container {
-  position: relative;
-  display: inline-block;
-}
 
 .deck-image {
   max-width: 900px;
@@ -176,4 +187,58 @@ body {
 
 .inventory-table tr:nth-child(even) {
   background-color: #f2f2f2;
+}
+
+.add-card {
+  margin: 30px auto;
+  width: 200px;
+  height: 160px;
+  border: 3px dashed #999;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.add-card:hover {
+  background: #f0f0f0;
+}
+
+.add-card .plus {
+  font-size: 50px;
+  font-weight: bold;
+}
+
+.box-card {
+  position: relative;
+}
+
+.delete-btn {
+  position: absolute;
+  bottom: 8px;
+  right: 10px;
+  cursor: pointer;
+  font-size: 20px;
+  opacity: 0.6;
+  transition: 0.2s;
+}
+
+.delete-btn:hover {
+  opacity: 1;
+}
+
+/* ===== FIX POSITION DES ZONES ===== */
+.image-wrapper {
+  width: 900px;
+  max-width: 95%;
+  margin: 0 auto;
+}
+
+.image-container {
+  position: relative;   /* ⭐ LE FIX IMPORTANT */
+  width: 100%;
+  display: block;
 }

@@ -45,39 +45,52 @@ function displayBoxes() {
 window.onload = displayBoxes;
 
 // =============================
-// RECHERCHE GLOBALE (HOME PAGE)
+// RECHERCHE GLOBALE (HOME)
 // =============================
-const path = window.location.pathname;
-const isHome = path.endsWith("/") || path.endsWith("index.html");
 
-if (isHome) {
-  const searchInput = document.getElementById("search");
+// on vérifie juste si la barre existe
+const searchInput = document.getElementById("search");
+
+if (searchInput) {
 
   fetch("data.json")
     .then(res => res.json())
-    .then(data => {
+    .then(jsonData => {
+
+      const localData = JSON.parse(localStorage.getItem("inventory")) || {};
+      const data = { ...jsonData, ...localData };
 
       searchInput.addEventListener("input", () => {
+
         const term = searchInput.value.toLowerCase().trim();
         const resultsDiv = document.getElementById("searchResults");
         resultsDiv.innerHTML = "";
 
         if (term.length < 2) return;
 
+        let resultsCount = 0;
+
         Object.keys(data).forEach(location => {
+          if (!Array.isArray(data[location])) return;
+
           data[location].forEach(box => {
 
-            // texte searchable
-            const itemsText = box.items.join(" ").toLowerCase();
-            const boxText = (box.name + " " + box.description).toLowerCase();
+            const name = (box.name || box.title || "").toLowerCase();
+            const desc = (box.description || "").toLowerCase();
+            const items = Array.isArray(box.items) ? box.items.join(" ").toLowerCase() : "";
 
-            if (itemsText.includes(term) || boxText.includes(term)) {
+            const searchableText = name + " " + desc + " " + items;
+
+            if (searchableText.includes(term)) {
+
+              resultsCount++;
+
               resultsDiv.innerHTML += `
                 <div class="result-card">
-                  <a href="${location}_${box.id}.html">
-                    <strong>${box.name}</strong><br>
-                    ${box.description}<br>
-                    <small>📍 ${location}</small>
+                  <a href="${location}_${box.id || box.ref}.html">
+                    <strong>${box.name || box.title}</strong><br>
+                    ${box.description || ""}
+                    <br><small>📍 ${location}</small>
                   </a>
                 </div>
               `;
@@ -86,6 +99,12 @@ if (isHome) {
           });
         });
 
+        if (resultsCount === 0) {
+          resultsDiv.innerHTML = "<p>No results found.</p>";
+        }
+
       });
+
     });
 }
+
