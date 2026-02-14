@@ -62,11 +62,20 @@ if (searchInput) {
 
       searchInput.addEventListener("input", () => {
 
+        const table = document.getElementById("searchResultsTable");
         const term = searchInput.value.toLowerCase().trim();
-        const resultsDiv = document.getElementById("searchResults");
-        resultsDiv.innerHTML = "";
+        const resultsBody = document.getElementById("searchResults");
+        resultsBody.innerHTML = "";
 
-        if (term.length < 2) return;
+
+        if (term.length < 2) {
+  table.style.display = "none";
+  resultsBody.innerHTML = "";
+  return;
+}
+
+table.style.display = "table";
+
 
         let resultsCount = 0;
 
@@ -77,7 +86,20 @@ if (searchInput) {
 
             const name = (box.name || box.title || "").toLowerCase();
             const desc = (box.description || "").toLowerCase();
-            const items = Array.isArray(box.items) ? box.items.join(" ").toLowerCase() : "";
+            let items = "";
+
+            if (Array.isArray(box.items)) {
+
+                // ancien format (tableau de strings)
+                if (typeof box.items[0] === "string") {
+                  items = box.items.join(" ").toLowerCase();
+                }
+
+                // nouveau format (objets avec name)
+                if (typeof box.items[0] === "object") {
+                  items = box.items.map(i => i.name || "").join(" ").toLowerCase();
+                }
+              }
 
             const searchableText = name + " " + desc + " " + items;
 
@@ -85,22 +107,44 @@ if (searchInput) {
 
               resultsCount++;
 
-              resultsDiv.innerHTML += `
-                <div class="result-card">
-                  <a href="${location}_${box.id || box.ref}.html">
-                    <strong>${box.name || box.title}</strong><br>
-                    ${box.description || ""}
-                    <br><small>📍 ${location}</small>
-                  </a>
-                </div>
-              `;
+             // parcourir les items de la box
+              if (Array.isArray(box.items)) {
+
+                box.items.forEach(item => {
+
+                  const itemName = typeof item === "string" ? item : item.name;
+                  const qty = typeof item === "object" ? item.qty : "";
+
+                  if (!itemName || !itemName.toLowerCase().includes(term)) return;
+
+                  resultsCount++;
+
+                  resultsBody.innerHTML += `
+                    <tr class="search-row"
+                      onclick="window.location='storage.html?zone=${location}&box=${box.id || box.ref}'">
+                      
+                      <td>${itemName}</td>
+                      <td>${location}</td>
+                      <td>${box.name || box.title || box.ref}</td>
+                      <td>${qty || ""}</td>
+
+                    </tr>
+                  `;
+                });
+
+}
+
             }
 
           });
         });
 
         if (resultsCount === 0) {
-          resultsDiv.innerHTML = "<p>No results found.</p>";
+         resultsBody.innerHTML = `
+          <tr>
+            <td colspan="4">No results found</td>
+          </tr>`;
+
         }
 
       });
@@ -108,3 +152,68 @@ if (searchInput) {
     });
 }
 
+// =============================
+// RECHERCHE DANS UNE ZONE
+// =============================
+
+const searchZone = document.getElementById("searchZone");
+
+if (searchZone) {
+
+  fetch("data.json")
+    .then(res => res.json())
+    .then(jsonData => {
+
+      const localData = JSON.parse(localStorage.getItem("inventory")) || {};
+      const data = { ...jsonData, ...localData };
+
+      const location = getCurrentLocation();
+
+      searchZone.addEventListener("input", () => {
+
+        const term = searchZone.value.toLowerCase().trim();
+        const container = document.getElementById("container");
+        container.innerHTML = "";
+
+        const boxes = data[location];
+        if (!boxes) return;
+
+        boxes.forEach(box => {
+
+          const name = (box.name || box.title || "").toLowerCase();
+          const desc = (box.description || "").toLowerCase();
+
+          let items = "";
+          if (Array.isArray(box.items)) {
+            if (typeof box.items[0] === "string") {
+              items = box.items.join(" ").toLowerCase();
+            }
+            if (typeof box.items[0] === "object") {
+              items = box.items.map(i => i.name || "").join(" ").toLowerCase();
+            }
+          }
+
+          const searchableText = name + " " + desc + " " + items;
+
+          if (searchableText.includes(term)) {
+
+            const boxDiv = document.createElement('div');
+            boxDiv.className = 'box-card';
+
+            boxDiv.innerHTML = `
+              <a href="storage.html?zone=${location}&box=${box.id || box.ref}" class="box-link-full">
+                <h3>${box.name || box.title}</h3>
+                <p>${box.description || ""}</p>
+              </a>
+            `;
+
+            container.appendChild(boxDiv);
+          }
+
+        });
+
+      });
+
+    });
+
+}

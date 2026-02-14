@@ -23,14 +23,17 @@ function renderLazaretBoxes() {
   div.className = "box-card";
 
   div.innerHTML = `
-    <a href="storage.html?zone=${ZONE}&box=${box.ref}" class="box-link">
-      <h3>${box.ref}</h3>
-      <p>${box.title}</p>
-      <small>${box.description}</small>
-    </a>
+  <a href="storage.html?zone=${ZONE}&box=${box.ref}" class="box-link-full">
+    <h3>${box.ref}</h3>
+    <p class="box-title">${box.title || "No title"}</p>
+    <small>${box.description || ""}</small>
+  </a>
 
-    <div class="delete-btn" onclick="deleteBox('${box.ref}')">🗑</div>
-  `;
+  <div class="edit-btn" onclick="editBox('${box.ref}')">✏️</div>
+  <div class="delete-btn" onclick="deleteBox('${box.ref}')">🗑</div>
+`;
+
+
 
   container.appendChild(div);
 });
@@ -54,16 +57,32 @@ function addStorage() {
   data[ZONE].push({ ref, title, description });
   saveLocalBoxes(data);
 
-  // crée la page automatiquement
-  createBoxPage(ref);
 
   renderLazaretBoxes();
 }
 
-// création page box automatique (vide pour l’instant)
-function createBoxPage(ref) {
-  alert("Page " + ZONE + "_" + ref + ".html à créer plus tard 🙂");
+function editBox(ref){
+  const data = getLocalBoxes();
+  const boxes = data[ZONE];
+  const box = boxes.find(b => b.ref === ref);
+  if(!box) return;
+
+  const newRef = prompt("Storage reference", box.ref);
+  if(!newRef) return;
+
+  const newTitle = prompt("Storage title", box.title || "");
+  const newDesc = prompt("Storage description", box.description || "");
+
+  box.ref = newRef.trim();
+  box.title = newTitle.trim();
+  box.description = newDesc.trim();
+
+  saveLocalBoxes(data);
+  renderLazaretBoxes();
 }
+
+
+// création page box automatique (vide pour l’instant)
 
 // recherche locale
 document.getElementById("searchZone").addEventListener("input", e => {

@@ -18,7 +18,18 @@
     <input type="text" id="search" placeholder="Search inventory...">
   </div>
   
-<div id="searchResults"></div>
+<table id="searchResultsTable" class="inventory-table" style="display:none;">
+  <thead>
+    <tr>
+      <th>Item</th>
+      <th>Zone</th>
+      <th>Storage</th>
+      <th>Qty</th>
+    </tr>
+  </thead>
+  <tbody id="searchResults"></tbody>
+</table>
+
 
   <div class="image-wrapper">
     <div class="image-container">

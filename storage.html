@@ -1,25 +1,82 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
-  <title>Storage</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<title>Storage</title>
+<link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-
 <div class="page-wrapper">
 <div class="page-content">
 
 <h1 id="storageTitle">Storage</h1>
 
-<a id="backLink">← Back to zone</a>
-
-<div id="inventoryContainer"></div>
-
+<div class="storage-nav">
+  <a href="index.html">← Home</a>
+  <a id="backLink"></a>
 </div>
+
+
+<div class="search-container">
+  <input type="text" id="searchItem" placeholder="Search in this storage...">
 </div>
+
+<!-- PHOTOS -->
+<div id="photoGallery"></div>
+
+<!-- TABLE INVENTAIRE -->
+<table class="inventory-table">
+  <thead>
+  <tr>
+    <th>Item</th>
+    <th>Qty</th>
+    <th>Photo</th>
+    <th>Added on</th>
+    <th></th>
+  </tr>
+</thead>
+  <tbody id="inventoryBody"></tbody>
+</table>
+
+<!-- ACTIONS -->
+<div id="actionsContainer">
+  <div class="add-card" onclick="addItem()">
+    <div class="plus">+</div>
+    <p>Add item</p>
+  </div>
+
+  <div class="add-card" onclick="addPhoto()">
+    <div class="plus">+</div>
+    <p>Add photo</p>
+  </div>
+</div>
+
+<!-- IMAGE OVERLAY -->
+<div id="photoViewer" class="hidden">
+  <span id="closeViewer">✕</span>
+  <span id="prevPhoto">◀</span>
+
+  <div id="viewerCenter">
+    <img id="viewerImg">
+    <p id="viewerDate"></p>
+  </div>
+
+  <span id="nextPhoto">▶</span>
+  <span id="deletePhoto">🗑</span>
+</div>
+
 
 <script src="storage.js"></script>
+</div>
+</div>
 </body>
-</html>
+</html><div id="photoViewer" class="hidden">
+  <span id="closeViewer">✕</span>
+  <span id="prevPhoto">◀</span>
+  <img id="viewerImg">
+  <p id="viewerDate" style="color:white;margin-top:10px;"></p>
+  <span id="nextPhoto">▶</span>
+  <span id="deletePhoto">🗑</span>
+</div>
+
